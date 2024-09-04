@@ -5,10 +5,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Disaster Management</Text>
-      <Button
-        title="Face Detection"
-        onPress={() => navigation.navigate("Face Detection")}
-      />
+
       <Button
         title="Request Item"
         onPress={() => navigation.navigate("Request Item")}

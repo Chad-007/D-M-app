@@ -1,11 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-
+import { View, Button, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import ItemRequestForm from "./ItemRequestForm";
+import ViewRequests from "./ViewRequests";
 export default function RequestItemScreen() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Request Item</Text>
-      {/* Add your Request Item logic here */}
+      <Button
+        title="Request Item"
+        onPress={() => navigation.navigate("item")}
+      />
+      <Button
+        title="View Item Requests"
+        onPress={() => navigation.navigate("view")}
+      />
     </View>
   );
 }
@@ -15,8 +25,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
   },
 });
