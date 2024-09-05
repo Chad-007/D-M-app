@@ -18,13 +18,16 @@ export default function ItemRequestForm() {
     };
 
     try {
-      const response = await fetch("http://192.168.19.122/api/request-item", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+      const response = await fetch(
+        "http://192.168.19.122:5000/api/request-item",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        }
+      );
       const result = await response.json();
       if (response.ok) {
         console.log("Request saved:", result);
