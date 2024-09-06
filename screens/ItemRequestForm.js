@@ -7,6 +7,8 @@ export default function ItemRequestForm() {
   const [foodPackets, setFoodPackets] = useState("");
   const [utilities, setUtilities] = useState("");
   const [age, setAge] = useState("");
+  const [address, setAddress] = useState(""); // Address field
+  const [phone, setPhone] = useState(""); // Phone field
 
   const handleSubmit = async () => {
     const requestData = {
@@ -15,7 +17,11 @@ export default function ItemRequestForm() {
       foodPackets: itemType === "Food" ? foodPackets : undefined,
       utilities: itemType === "Utilities" ? utilities : undefined,
       age: itemType === "Utilities" ? age : undefined,
+      address, // Always included
+      phone, // Always included
     };
+
+    console.log("Sending request data:", requestData); // Debugging log
 
     try {
       const response = await fetch(
@@ -72,6 +78,19 @@ export default function ItemRequestForm() {
           />
         </>
       )}
+      {/* These fields should always be visible */}
+      <TextInput
+        placeholder="Your Address"
+        value={address}
+        onChangeText={setAddress}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Your Phone Number"
+        value={phone}
+        onChangeText={setPhone}
+        style={styles.input}
+      />
       <Button title="Submit Request" onPress={handleSubmit} />
       <Button
         title="Switch to Utilities"

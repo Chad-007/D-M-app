@@ -28,22 +28,43 @@ export default function HomeScreen({ navigation }) {
           <Icon name="life-buoy" size={50} color="#FFD700" />
           <Text style={styles.buttonText}>Rescue</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.emergencyButton}
-          onPress={() => handleButtonPress("Prediction", "Prediction")}
+          onPress={() => handleButtonPress("upload", "upload")}
         >
-          <Icon name="trending-up" size={50} color="#FFD700" />
-          <Text style={styles.buttonText}>Prediction</Text>
+          <Icon name="life-buoy" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>upload</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.emergencyButton}
+          onPress={() => handleButtonPress("missing", "missing")}
+        >
+          <Icon name="life-buoy" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>missing</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
+          style={styles.emergencyButton}
+          onPress={() => handleButtonPress("search", "search")}
+        >
+          <Icon name="life-buoy" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>search</Text>
+        </TouchableOpacity>
+
+        {/* <TouchableOpacity
           style={styles.emergencyButton}
           onPress={() => handleButtonPress("FaceDetection", "Face Detection")}
         >
           <Icon name="camera" size={50} color="#FFD700" />
           <Text style={styles.buttonText}>Face Detection</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        {/* <TouchableOpacity
+          style={styles.emergencyButton}
+          onPress={() => handleButtonPress("new", "new")}
+        >
+          <Icon name="camera" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>new</Text>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.emergencyButton}
@@ -54,7 +75,6 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Floating Chatbot Button */}
       <TouchableOpacity
         style={styles.chatbotButton}
         onPress={() => handleButtonPress("Chatbot", "Chatbot")}

@@ -3,13 +3,17 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import RequestItemScreen from "./screens/RequestItemScreen";
-import PredictionScreen from "./screens/PredictionScreen";
+// import PredictionScreen from "./screens/PredictionScreen";
 import RescueScreen from "./screens/RescueScreen";
 import SmsScreen from "./screens/SmsScreen";
 import RescueRequestsScreen from "./screens/RescueRequestsScreen"; // Import the new screen
 import ViewRequests from "./screens/ViewRequests";
 import ItemRequestForm from "./screens/ItemRequestForm";
 import ChatBot from "./screens/ChatBot";
+import Newweather from "./screens/Newweather";
+import SearchCity from "./screens/SearchCity";
+import UploadPersonScreen from "./screens/UploadPerson";
+import MissingPerson from "./screens/MissingPerson";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -21,10 +25,13 @@ export default function App() {
         <Stack.Screen name="item" component={ItemRequestForm} />
         <Stack.Screen name="bot" component={ChatBot} />
         <Stack.Screen name="RequestItem" component={RequestItemScreen} />
-        <Stack.Screen name="Prediction" component={PredictionScreen} />
         <Stack.Screen name="Rescue" component={RescueScreen} />
         <Stack.Screen name="RescueRequests" component={RescueRequestsScreen} />
         <Stack.Screen name="SMS" component={SmsScreen} />
+        <Stack.Screen name="new" component={Newweather} />
+        <Stack.Screen name="missing" component={MissingPerson} />
+        <Stack.Screen name="upload" component={UploadPersonScreen} />
+        <Stack.Screen name="search" component={SearchCity} />
       </Stack.Navigator>
     </NavigationContainer>
   );

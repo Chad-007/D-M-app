@@ -15,12 +15,10 @@ export default function ViewRequests() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        // Use correct IP address and port. If using Android emulator, use '10.0.2.2'.
         const response = await fetch(
           "http://192.168.19.122:5000/api/request-item"
         );
 
-        // Check for a successful response
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -31,14 +29,13 @@ export default function ViewRequests() {
         setError(err.message);
         console.error("Error fetching requests:", err);
       } finally {
-        setLoading(false); // Stop loading whether successful or not
+        setLoading(false);
       }
     };
 
     fetchRequests();
   }, []);
 
-  // If loading, show a spinner
   if (loading) {
     return (
       <View style={styles.center}>
@@ -47,7 +44,6 @@ export default function ViewRequests() {
     );
   }
 
-  // If there's an error, show an error message
   if (error) {
     return (
       <View style={styles.center}>
@@ -69,6 +65,9 @@ export default function ViewRequests() {
           <Text>Age: {item.age}</Text>
         </>
       )}
+      {/* Address and Phone are now displayed for both Food and Utilities */}
+      <Text>Address: {item.address}</Text>
+      <Text>Phone: {item.phone}</Text>
     </View>
   );
 
@@ -76,7 +75,7 @@ export default function ViewRequests() {
     <FlatList
       data={requests}
       renderItem={renderItem}
-      keyExtractor={(item) => item._id} // Ensure the key is unique
+      keyExtractor={(item) => item._id}
     />
   );
 }
