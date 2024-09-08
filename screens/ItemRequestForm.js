@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 
 export default function ItemRequestForm() {
   const [itemType, setItemType] = useState("Food"); // Default item type
@@ -25,7 +32,7 @@ export default function ItemRequestForm() {
 
     try {
       const response = await fetch(
-        "http://192.168.19.122:5000/api/request-item",
+        "http://192.168.27.122:5000/api/request-item",
         {
           method: "POST",
           headers: {
@@ -36,12 +43,14 @@ export default function ItemRequestForm() {
       );
       const result = await response.json();
       if (response.ok) {
+        Alert.alert("Success", "Your request has been submitted.");
         console.log("Request saved:", result);
       } else {
-        console.error("Error:", result.error);
+        Alert.alert("Error", result.error || "Failed to submit request.");
       }
     } catch (error) {
       console.error("Error:", error);
+      Alert.alert("Error", "An error occurred while submitting the request.");
     }
   };
 
@@ -53,6 +62,7 @@ export default function ItemRequestForm() {
         value={name}
         onChangeText={setName}
         style={styles.input}
+        placeholderTextColor="#FFF" // Set placeholder text color to white
       />
       {itemType === "Food" && (
         <TextInput
@@ -60,6 +70,7 @@ export default function ItemRequestForm() {
           value={foodPackets}
           onChangeText={setFoodPackets}
           style={styles.input}
+          placeholderTextColor="#FFF" // Set placeholder text color to white
         />
       )}
       {itemType === "Utilities" && (
@@ -69,12 +80,14 @@ export default function ItemRequestForm() {
             value={utilities}
             onChangeText={setUtilities}
             style={styles.input}
+            placeholderTextColor="#FFF" // Set placeholder text color to white
           />
           <TextInput
             placeholder="Your Age"
             value={age}
             onChangeText={setAge}
             style={styles.input}
+            placeholderTextColor="#FFF" // Set placeholder text color to white
           />
         </>
       )}
@@ -84,19 +97,30 @@ export default function ItemRequestForm() {
         value={address}
         onChangeText={setAddress}
         style={styles.input}
+        placeholderTextColor="#FFF" // Set placeholder text color to white
       />
       <TextInput
         placeholder="Your Phone Number"
         value={phone}
         onChangeText={setPhone}
         style={styles.input}
+        placeholderTextColor="#FFF" // Set placeholder text color to white
       />
-      <Button title="Submit Request" onPress={handleSubmit} />
-      <Button
-        title="Switch to Utilities"
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <Text style={styles.submitButtonText}>Submit Request</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.switchButton}
         onPress={() => setItemType("Utilities")}
-      />
-      <Button title="Switch to Food" onPress={() => setItemType("Food")} />
+      >
+        <Text style={styles.switchButtonText}>Switch to Utilities</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.switchButton}
+        onPress={() => setItemType("Food")}
+      >
+        <Text style={styles.switchButtonText}>Switch to Food</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -105,15 +129,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#121212", // Dark background
   },
   title: {
     fontSize: 24,
-    marginBottom: 10,
+    fontWeight: "bold",
+    color: "#FFD700", // Gold text color
+    marginBottom: 20,
   },
   input: {
-    borderColor: "gray",
+    height: 40,
+    borderColor: "#ccc",
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    color: "#FFF", // Text color for input fields
+  },
+  submitButton: {
+    backgroundColor: "#1C1C1C", // Dark button background
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  submitButtonText: {
+    fontSize: 18,
+    color: "#FFD700", // Gold text color for buttons
+  },
+  switchButton: {
+    backgroundColor: "#1C1C1C", // Dark button background
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  switchButtonText: {
+    fontSize: 16,
+    color: "#FFD700", // Gold text color for buttons
   },
 });

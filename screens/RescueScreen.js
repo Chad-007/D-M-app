@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
@@ -8,10 +8,18 @@ export default function RescueScreen() {
   const [showLocation, setShowLocation] = useState(false);
   const [statusMessage, setStatusMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [intervalId, setIntervalId] = useState(null); // To store the interval ID
   const navigation = useNavigation();
 
-  const handleRescueMe = async () => {
-    // Request location permission
+  useEffect(() => {
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId); // Clean up the interval on unmount
+      }
+    };
+  }, [intervalId]);
+
+  const startRescueUpdates = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       setStatusMessage(null);
@@ -19,44 +27,61 @@ export default function RescueScreen() {
       return;
     }
 
-    try {
-      // Get current location
-      let currentLocation = await Location.getCurrentPositionAsync({});
-      if (currentLocation) {
-        setLocation(currentLocation);
-        setShowLocation(true);
+    // Clear any existing interval
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
 
-        // Generate a unique request number
-        const requestNumber = Date.now();
+    const id = setInterval(async () => {
+      try {
+        let currentLocation = await Location.getCurrentPositionAsync({});
+        if (currentLocation) {
+          setLocation(currentLocation);
+          setShowLocation(true);
 
-        // Send the location and request number to the server
-        const response = await fetch("http://192.168.19.122:5000/api/rescue", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            latitude: currentLocation.coords.latitude,
-            longitude: currentLocation.coords.longitude,
-            requestNumber: requestNumber, // Include requestNumber
-          }),
-        });
+          const requestNumber = Date.now();
 
-        if (response.ok) {
-          const data = await response.json();
-          setStatusMessage("Location successfully added!");
-          setError(null); // Clear any previous error
-          console.log("Rescue request submitted:", data);
+          const response = await fetch(
+            "http://192.168.27.122:5000/api/rescue",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                latitude: currentLocation.coords.latitude,
+                longitude: currentLocation.coords.longitude,
+                requestNumber: requestNumber,
+              }),
+            }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            setStatusMessage("Location successfully updated!");
+            setError(null);
+            console.log("Rescue request submitted:", data);
+          } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
         } else {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error("Failed to fetch location");
         }
-      } else {
-        throw new Error("Failed to fetch location");
+      } catch (error) {
+        console.error("Error submitting rescue request:", error);
+        setError("Location not updated. Please try again.");
+        setStatusMessage(null);
       }
-    } catch (error) {
-      console.error("Error submitting rescue request:", error);
-      setError("Location not added. Please try again.");
-      setStatusMessage(null); // Clear any previous success message
+    }, 10000); // Update every 10 seconds
+
+    setIntervalId(id); // Store interval ID to clean it up later
+  };
+
+  const stopRescueUpdates = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+      setStatusMessage("Rescue updates stopped.");
     }
   };
 
@@ -67,21 +92,34 @@ export default function RescueScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Rescue</Text>
-      <Button title="Rescue Me" onPress={handleRescueMe} />
-      <Button title="Show Rescue Requests" onPress={handleShowRescueRequests} />
+      <Button
+        title="Start Rescue Me"
+        onPress={startRescueUpdates}
+        color="#FFD700"
+      />
+      <Button
+        title="Stop Rescue Updates"
+        onPress={stopRescueUpdates}
+        color="#FFD700"
+      />
+      <Button
+        title="Show Rescue Requests"
+        onPress={handleShowRescueRequests}
+        color="#FFD700"
+      />
       {statusMessage && (
         <View style={styles.statusInfo}>
-          <Text>{statusMessage}</Text>
+          <Text style={styles.text}>{statusMessage}</Text>
         </View>
       )}
       {error && (
         <View style={styles.errorInfo}>
-          <Text>Error: {error}</Text>
+          <Text style={styles.text}>Error: {error}</Text>
         </View>
       )}
       {showLocation && location && (
         <View style={styles.locationInfo}>
-          <Text>
+          <Text style={styles.text}>
             Location: Latitude {location.coords.latitude}, Longitude{" "}
             {location.coords.longitude}
           </Text>
@@ -96,21 +134,45 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#121212",
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
+    color: "#FFD700",
   },
   locationInfo: {
     marginTop: 20,
+    backgroundColor: "#1C1C1C",
+    padding: 15,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
   statusInfo: {
     marginTop: 20,
-    fontSize: 16,
-    color: "green",
+    backgroundColor: "#1C1C1C",
+    padding: 15,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
   errorInfo: {
     marginTop: 20,
-    color: "red",
+    backgroundColor: "#1C1C1C",
+    padding: 15,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  text: {
+    fontSize: 16,
+    color: "#FFF",
   },
 });

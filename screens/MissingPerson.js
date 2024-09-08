@@ -16,7 +16,7 @@ const MissingPerson = () => {
     // Fetch persons data from the server
     const fetchPersons = async () => {
       try {
-        const response = await fetch("http://192.168.19.122:5000/api/person"); // Replace with your server URL
+        const response = await fetch("http://192.168.27.122:5000/api/person"); // Replace with your server URL
         const data = await response.json();
         setPersons(data);
         setLoading(false);
@@ -32,7 +32,7 @@ const MissingPerson = () => {
   if (loading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#FFD700" />
       </View>
     );
   }
@@ -40,7 +40,7 @@ const MissingPerson = () => {
   if (persons.length === 0) {
     return (
       <View style={styles.noDataContainer}>
-        <Text>No missing persons found.</Text>
+        <Text style={styles.noDataText}>No missing persons found.</Text>
       </View>
     );
   }
@@ -48,7 +48,7 @@ const MissingPerson = () => {
   const renderPerson = ({ item }) => (
     <View style={styles.card}>
       <Image
-        source={{ uri: `http://192.168.19.122:5000${item.photoUrl}` }}
+        source={{ uri: `http://192.168.27.122:5000${item.photoUrl}` }}
         style={styles.image}
       />
       <View style={styles.infoContainer}>
@@ -73,30 +73,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#121212", // Dark background
   },
   noDataContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#121212", // Dark background
+  },
+  noDataText: {
+    fontSize: 18,
+    color: "#FFD700", // Gold text color
   },
   listContainer: {
     padding: 16,
+    backgroundColor: "#121212", // Dark background
   },
   card: {
     flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: 8,
+    backgroundColor: "#1C1C1C", // Dark card background
+    borderRadius: 10,
     marginBottom: 16,
     padding: 12,
     shadowColor: "#000",
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 3,
   },
   image: {
     width: 80,
     height: 80,
-    borderRadius: 8,
+    borderRadius: 10,
   },
   infoContainer: {
     marginLeft: 16,
@@ -105,10 +112,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#FFD700", // Gold text color
   },
   address: {
     fontSize: 14,
-    color: "#666",
+    color: "#aaa", // Lighter text color
   },
 });
 

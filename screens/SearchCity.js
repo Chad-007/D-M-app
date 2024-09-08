@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SearchCity() {
@@ -15,21 +21,46 @@ export default function SearchCity() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
+    <View style={styles.container}>
       <TextInput
-        style={{
-          height: 50,
-          borderColor: "gray",
-          borderWidth: 1,
-          borderRadius: 10,
-          paddingHorizontal: 10,
-          marginBottom: 20,
-        }}
+        style={styles.searchInput}
         placeholder="Enter city name"
+        placeholderTextColor="#FFF" // White placeholder text
         value={city}
         onChangeText={(text) => setCity(text)}
       />
-      <Button title="Search" onPress={handleSearch} />
+      <TouchableOpacity style={styles.button} onPress={handleSearch}>
+        <Text style={styles.buttonText}>Search</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#121212", // Dark background to match other screens
+  },
+  searchInput: {
+    height: 50,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    color: "#FFF", // White text color
+  },
+  button: {
+    backgroundColor: "#FFD700", // Gold color
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#121212", // Dark text color for contrast
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});

@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+const axios = require("axios");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -89,6 +91,78 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// Face++ API credentials
+const FACE_PLUS_PLUS_API_KEY = "vnaWrRdpwGUeTmH9t_l1x7gEIdqI_XIC";
+const FACE_PLUS_PLUS_API_SECRET = "ZjKShLjaPmHxxnNrsH_DYKRbxu_KRPIT";
+const FACE_PLUS_PLUS_API_URL =
+  "https://api-us.faceplusplus.com/facepp/v3/compare";
+
+// Route to handle face comparison
+app.post("/api/compare-face", upload.single("image"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No image file uploaded." });
+  }
+
+  const uploadedImagePath = req.file.path;
+
+  try {
+    // Get all images from the uploads directory
+    const directoryPath = path.join(__dirname, "uploads");
+    const files = fs
+      .readdirSync(directoryPath)
+      .filter((file) => file !== req.file.filename);
+
+    let mostSimilarPerson = null;
+    let highestSimilarity = 0;
+
+    // Compare the uploaded image with each image in the directory
+    for (const file of files) {
+      const imagePath = path.join(directoryPath, file);
+
+      // Read images and encode them as base64
+      const uploadedImage = fs.readFileSync(uploadedImagePath, {
+        encoding: "base64",
+      });
+      const comparedImage = fs.readFileSync(imagePath, { encoding: "base64" });
+
+      // Call Face++ API
+      const response = await axios.post(FACE_PLUS_PLUS_API_URL, null, {
+        params: {
+          api_key: FACE_PLUS_PLUS_API_KEY,
+          api_secret: FACE_PLUS_PLUS_API_SECRET,
+          image_base64_1: uploadedImage,
+          image_base64_2: comparedImage,
+        },
+      });
+
+      console.log("Face++ API Response:", response.data); // Log the API response
+
+      const similarity = response.data.similarity;
+
+      if (similarity > highestSimilarity) {
+        highestSimilarity = similarity;
+        mostSimilarPerson = {
+          name: file, // Adjust this based on your actual naming convention
+          address: "Address related to " + file, // Replace with actual address retrieval logic
+        };
+      }
+    }
+
+    fs.unlinkSync(uploadedImagePath); // Cleanup the uploaded file
+
+    res.status(200).json({
+      mostSimilarPerson,
+      similarity: highestSimilarity,
+    });
+  } catch (error) {
+    console.error(
+      "Error in face comparison:",
+      error.response?.data || error.message
+    ); // Log detailed error
+    res.status(500).json({ error: "Error comparing face." });
+  }
+});
+
 // Route to handle new rescue requests
 app.post("/api/rescue", async (req, res) => {
   const { latitude, longitude, requestNumber } = req.body;
@@ -161,7 +235,6 @@ app.get("/api/request-item", async (req, res) => {
 });
 
 // Route to handle new person uploads
-// Route to handle new person uploads
 app.post("/api/person", upload.single("photo"), async (req, res) => {
   const { name, address } = req.body;
   const photoUrl = req.file ? `/uploads/${req.file.filename}` : null;
@@ -223,11 +296,6 @@ app.get("/api/images", async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-});
-
-// Basic route for server status
-app.get("/", (req, res) => {
-  res.send("Server is up and running");
 });
 
 // Start server

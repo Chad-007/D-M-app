@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
+
 export default function RescueRequestsScreen() {
   const [rescueRequests, setRescueRequests] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.19.122:5000/api/rescue")
+    fetch("http://192.168.27.122:5000/api/rescue")
       .then((response) => response.json())
       .then((data) => {
         setRescueRequests(data);
@@ -19,11 +20,11 @@ export default function RescueRequestsScreen() {
       <Text style={styles.title}>Rescue Requests</Text>
       <FlatList
         data={rescueRequests}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item._id.toString()} // Ensure _id is converted to string
         renderItem={({ item }) => (
           <View style={styles.requestItem}>
-            <Text>Request No: {item._id}</Text>
-            <Text>
+            <Text style={styles.requestTitle}>Request No: {item._id}</Text>
+            <Text style={styles.requestText}>
               Location: Latitude {item.latitude}, Longitude {item.longitude}
             </Text>
           </View>
@@ -37,14 +38,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#121212", // Dark background to match RescueScreen
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
+    color: "#FFD700", // Gold color for title
   },
   requestItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    backgroundColor: "#1C1C1C", // Dark card background
+    padding: 15,
+    marginBottom: 15,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  requestTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FFD700", // Gold color for request number
+  },
+  requestText: {
+    fontSize: 16,
+    color: "#FFF", // White color for text
   },
 });

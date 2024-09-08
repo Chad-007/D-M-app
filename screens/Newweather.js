@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 const API_KEY = "f99f0a754457bd0edfa6f77d9bb511cc";
 
@@ -58,56 +58,113 @@ export default function Newweather(props) {
   };
 
   const Data = ({ title, value }) => (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "gray", fontSize: 22 }}>{title}</Text>
-      <Text style={{ color: "white", fontSize: 22 }}>{value}</Text>
+    <View style={styles.dataContainer}>
+      <Text style={styles.dataTitle}>{title}</Text>
+      <Text style={styles.dataValue}>{value}</Text>
     </View>
   );
 
   if (loading) {
-    return <Text style={{ color: "white", fontSize: 22 }}>Loading...</Text>;
+    return <Text style={styles.loadingText}>Loading...</Text>;
   }
 
   if (error) {
-    return <Text style={{ color: "red", fontSize: 22 }}>{error}</Text>;
+    return <Text style={styles.errorText}>{error}</Text>;
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       {data ? (
         <View>
-          <Text style={{ color: "white", fontSize: 40 }}>{name}</Text>
-          <Text style={{ fontSize: 22, color: "white", textAlign: "center" }}>
+          <Text style={styles.cityName}>{name}</Text>
+          <Text style={styles.weatherMain}>
             {data?.weather?.[0]?.main || "N/A"}
           </Text>
-          <Text style={{ color: "white", fontSize: 64 }}>
-            {(data?.main?.temp - 273).toFixed(2)}&deg; C
+          <Text style={styles.temperature}>
+            {(data?.main?.temp - 273.15).toFixed(2)}&deg; C
           </Text>
 
           {/* Display Alert if available */}
-          {alert && (
-            <Text style={{ color: "red", fontSize: 22, marginBottom: 16 }}>
-              {alert}
-            </Text>
-          )}
+          {alert && <Text style={styles.alertText}>{alert}</Text>}
 
-          <Text style={{ color: "white", fontSize: 22, marginBottom: 16 }}>
-            Weather Details
-          </Text>
+          <Text style={styles.detailsHeader}>Weather Details</Text>
           <Data value={data?.wind?.speed || "N/A"} title="Wind" />
           <Data value={data?.main?.pressure || "N/A"} title="Pressure" />
           <Data value={`${data?.main?.humidity || "N/A"}%`} title="Humidity" />
           <Data value={data?.visibility || "N/A"} title="Visibility" />
         </View>
       ) : (
-        <Text style={{ color: "white", fontSize: 22 }}>No data available</Text>
+        <Text style={styles.noDataText}>No data available</Text>
       )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#121212", // Dark background
+  },
+  cityName: {
+    color: "#FFD700", // Gold color
+    fontSize: 40,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  weatherMain: {
+    color: "#FFF", // White color
+    fontSize: 22,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  temperature: {
+    color: "#FFF", // White color
+    fontSize: 64,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  alertText: {
+    color: "red", // Alert text color
+    fontSize: 22,
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  detailsHeader: {
+    color: "#FFF", // White color
+    fontSize: 22,
+    marginBottom: 16,
+  },
+  dataContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  dataTitle: {
+    color: "gray",
+    fontSize: 22,
+  },
+  dataValue: {
+    color: "#FFF", // White color
+    fontSize: 22,
+  },
+  loadingText: {
+    color: "#FFF", // White color
+    fontSize: 22,
+    textAlign: "center",
+    marginTop: 50,
+  },
+  errorText: {
+    color: "red", // Error text color
+    fontSize: 22,
+    textAlign: "center",
+    marginTop: 50,
+  },
+  noDataText: {
+    color: "#FFF", // White color
+    fontSize: 22,
+    textAlign: "center",
+    marginTop: 50,
+  },
+});

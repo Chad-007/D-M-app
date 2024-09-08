@@ -28,59 +28,47 @@ export default function HomeScreen({ navigation }) {
           <Icon name="life-buoy" size={50} color="#FFD700" />
           <Text style={styles.buttonText}>Rescue</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.emergencyButton}
-          onPress={() => handleButtonPress("upload", "upload")}
+          onPress={() => handleButtonPress("prediction", "prediction")}
         >
-          <Icon name="life-buoy" size={50} color="#FFD700" />
-          <Text style={styles.buttonText}>upload</Text>
+          <Icon name="trending-up" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>Prediction</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.emergencyButton}
-          onPress={() => handleButtonPress("missing", "missing")}
+          onPress={() => handleButtonPress("both", "both")}
         >
-          <Icon name="life-buoy" size={50} color="#FFD700" />
-          <Text style={styles.buttonText}>missing</Text>
+          <Icon name="user" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>Missing</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.emergencyButton}
+          onPress={() => handleButtonPress("tips", "tips")}
+        >
+          <Icon name="book-open" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>Tips</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.emergencyButton}
           onPress={() => handleButtonPress("search", "search")}
         >
-          <Icon name="life-buoy" size={50} color="#FFD700" />
-          <Text style={styles.buttonText}>search</Text>
+          <Icon name="search" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>Search</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          style={styles.emergencyButton}
-          onPress={() => handleButtonPress("FaceDetection", "Face Detection")}
-        >
-          <Icon name="camera" size={50} color="#FFD700" />
-          <Text style={styles.buttonText}>Face Detection</Text>
-        </TouchableOpacity> */}
-        {/* <TouchableOpacity
-          style={styles.emergencyButton}
-          onPress={() => handleButtonPress("new", "new")}
-        >
-          <Icon name="camera" size={50} color="#FFD700" />
-          <Text style={styles.buttonText}>new</Text>
-        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.emergencyButton}
-          onPress={() => handleButtonPress("SMS", "SMS")}
+          onPress={() => handleButtonPress("image", "image")}
         >
-          <Icon name="message-circle" size={50} color="#FFD700" />
-          <Text style={styles.buttonText}>SMS</Text>
+          <Icon name="image" size={50} color="#FFD700" />
+          <Text style={styles.buttonText}>Image</Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style={styles.chatbotButton}
-        onPress={() => handleButtonPress("Chatbot", "Chatbot")}
-      >
-        <Icon name="message-circle" size={30} color="#FFF" />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -125,21 +113,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#FFD700", // Gold text color for buttons
     textAlign: "center",
-  },
-  chatbotButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "#44c767", // Green floating button
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 5,
   },
 });

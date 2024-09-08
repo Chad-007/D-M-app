@@ -14,6 +14,10 @@ import Newweather from "./screens/Newweather";
 import SearchCity from "./screens/SearchCity";
 import UploadPersonScreen from "./screens/UploadPerson";
 import MissingPerson from "./screens/MissingPerson";
+import Prediction from "./screens/Prediction";
+import BothScreen from "./screens/BothScreen";
+import ImageAPI from "./screens/ImageApi";
+import TipsScreen from "./screens/TipsScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -30,8 +34,13 @@ export default function App() {
         <Stack.Screen name="SMS" component={SmsScreen} />
         <Stack.Screen name="new" component={Newweather} />
         <Stack.Screen name="missing" component={MissingPerson} />
+        <Stack.Screen name="prediction" component={Prediction} />
         <Stack.Screen name="upload" component={UploadPersonScreen} />
         <Stack.Screen name="search" component={SearchCity} />
+        <Stack.Screen name="image" component={ImageAPI} />
+        <Stack.Screen name="tips" component={TipsScreen} />
+
+        <Stack.Screen name="both" component={BothScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
